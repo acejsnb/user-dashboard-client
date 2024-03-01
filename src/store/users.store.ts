@@ -21,6 +21,5 @@ export class UsersStore {
 
     async getUsers() {
         this.users = await getUsers();
-        console.log(this.users);
     }
 }

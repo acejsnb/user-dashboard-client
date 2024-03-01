@@ -1,23 +1,23 @@
 'use client';
-import {FC, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useParams} from "next/navigation";
 import {observer} from "mobx-react-lite";
 import {getPosts, PostItem, UserItem} from "@/apis";
-import {ComponentProps} from "@/store";
+import {userStore} from "@/store";
 
-const Posts: FC<ComponentProps> = ({props}) => {
+const Posts = () => {
     const params = useParams();
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<UserItem>();
     const [posts, setPosts] = useState<PostItem[]>([]);
 
     useEffect(() => {
-        if (!params.id) return;
-        if (!props.users?.length) props.getUsers();
-        setUser(props.users.find((d: UserItem) => String(d.id) === params.id));
-    }, [params.id, props.users])
+        setUser(userStore.users.find((d: UserItem) => String(d.id) === params.id));
+    }, [userStore.users])
     useEffect(() => {
-        if (!params.id) return;
+        if (!userStore.users?.length) userStore.getUsers();
+    }, [params.id])
+    useEffect(() => {
         setLoading(true)
         getPosts({userId: params.id as string}).then(res => {
             setPosts(res as PostItem[]);

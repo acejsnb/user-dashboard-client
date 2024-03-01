@@ -1,16 +1,12 @@
-import {useEffect, useState, FC} from "react";
-import {useNavigate} from "react-router";
+'use client';
+import {useEffect, useState} from "react";
+import Link from "next/link";
 import {observer} from "mobx-react-lite";
 import {UserItem} from "@/apis";
 import {ComponentProps} from "@/store";
 
-const Home: FC<ComponentProps> = ({props}) => {
+const Home = ({props}: ComponentProps) => {
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
-
-  const toPost = (id: number) => {
-      navigate(`/posts/${id}`)
-  }
 
   useEffect(() => {
       props.getUsers();
@@ -33,14 +29,14 @@ const Home: FC<ComponentProps> = ({props}) => {
             </div>
         ))}
       {props.users?.length ? props.users.map((item: UserItem) => (
-          <div
+          <Link href={`/posts/${item.id}`}
               className="rounded-2xl border border-gray-200 p-4 mb-3 cursor-pointer shadow"
                key={item.id}
-              onClick={() => toPost(item.id)}
+              // onClick={() => toPost(item.id)}
           >
             <section>{item.name}</section>
             <section className="text-xs text-gray-500">{item.address.city}</section>
-          </div>
+          </Link>
       )) : (
           <h1 className="flex justify-center mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">No data</h1>
       )}
